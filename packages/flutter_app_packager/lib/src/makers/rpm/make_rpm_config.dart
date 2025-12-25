@@ -11,7 +11,6 @@ class MakeRPMConfig extends MakeConfig {
     this.categories,
     this.genericName,
     this.icon,
-    this.metainfo,
     this.keywords,
     this.supportedMimeType,
 
@@ -41,7 +40,6 @@ class MakeRPMConfig extends MakeConfig {
     return MakeRPMConfig(
       displayName: json['display_name'] as String,
       icon: json['icon'] as String?,
-      metainfo: json['metainfo'] as String?,
       genericName: json['generic_name'] as String?,
       startupNotify: json['startup_notify'] as bool?,
       keywords: (json['keywords'] as List<dynamic>?)?.cast<String>(),
@@ -56,7 +54,7 @@ class MakeRPMConfig extends MakeConfig {
       packagerEmail: json['packagerEmail'] as String?,
       license: json['license'] as String?,
       url: json['url'] as String?,
-      buildArch: json['build_arch'] as String? ?? _getArchitecture(),
+      buildArch: json['build_arch'] as String?,
       requires: (json['requires'] as List<dynamic>?)?.cast<String>(),
       buildRequires: (json['build_requires'] as List<dynamic>?)?.cast<String>(),
       description: json['description'] as String?,
@@ -73,7 +71,6 @@ class MakeRPMConfig extends MakeConfig {
 
   String displayName;
   String? icon;
-  String? metainfo;
   String? genericName;
   bool? startupNotify;
   List<String>? keywords;
@@ -121,7 +118,7 @@ class MakeRPMConfig extends MakeConfig {
           'URL': url,
           'Requires': requires?.join(', '),
           'BuildRequires': buildRequires?.join(', '),
-          'BuildArch': buildArch ?? _getArchitecture(),
+          'BuildArch': buildArch ?? 'x86_64',
         }..removeWhere((key, value) => value == null),
         'body': {
           '%description': description ?? pubspec.description,
@@ -129,13 +126,11 @@ class MakeRPMConfig extends MakeConfig {
             'mkdir -p %{buildroot}%{_bindir}',
             'mkdir -p %{buildroot}%{_datadir}/%{name}',
             'mkdir -p %{buildroot}%{_datadir}/applications',
-            'mkdir -p %{buildroot}%{_datadir}/metainfo',
             'mkdir -p %{buildroot}%{_datadir}/pixmaps',
             'cp -r %{name}/* %{buildroot}%{_datadir}/%{name}',
             'ln -s %{_datadir}/%{name}/%{name} %{buildroot}%{_bindir}/%{name}',
             'cp -r %{name}.desktop %{buildroot}%{_datadir}/applications',
             'cp -r %{name}.png %{buildroot}%{_datadir}/pixmaps',
-            'cp -r %{name}*.xml %{buildroot}%{_datadir}/metainfo || :',
             'update-mime-database %{_datadir}/mime &> /dev/null || :',
           ].join('\n'),
           '%postun': ['update-mime-database %{_datadir}/mime &> /dev/null || :']
@@ -144,7 +139,6 @@ class MakeRPMConfig extends MakeConfig {
             '%{_bindir}/%{name}',
             '%{_datadir}/%{name}',
             '%{_datadir}/applications/%{name}.desktop',
-            '%{_datadir}/metainfo',
           ].join('\n'),
         }..removeWhere((key, value) => value == null),
         'inline-body': {
@@ -226,14 +220,5 @@ class MakeRpmConfigLoader extends DefaultMakeConfigLoader {
       '$platform/packaging/$packageFormat/make_config.yaml',
     );
     return MakeRPMConfig.fromJson(map).copyWith(baseMakeConfig);
-  }
-}
-
-String _getArchitecture() {
-  final result = Process.runSync('uname', ['-m']);
-  if ('${result.stdout}'.trim() == 'aarch64') {
-    return 'aarch64';
-  } else {
-    return 'x86_64';
   }
 }

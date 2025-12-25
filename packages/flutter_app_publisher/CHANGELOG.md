@@ -1,17 +1,3 @@
-## 0.4.6
-
-* feat: Use GitHub Actions environment variables as fallback when custom variables are not defined (#217)
-* fix: Resolve GooglePlay publishing error (status: 400, message: "This edit has already been committed") (#214)
-
-## 0.4.5
-
-* bump `shell_executor` to 0.1.6
-* bump `parse_app_package` to 0.4.5
-
-## 0.4.4
-
-* Support set track for playstore deployment (#185)
-
 ## 0.4.2
 
 * some fixes

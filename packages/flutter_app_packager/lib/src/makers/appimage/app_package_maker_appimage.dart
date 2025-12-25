@@ -149,33 +149,6 @@ class AppPackageMakerAppImage extends AppPackageMaker {
         ),
       );
 
-      if (makeConfig.metainfo != null) {
-        final metainfoDir = path.join(
-          makeConfig.packagingDirectory.path,
-          '${makeConfig.appName}.AppDir/usr/share/metainfo',
-        );
-        await $('mkdir', [
-          '-p',
-          metainfoDir,
-        ]).then((value) {
-          if (value.exitCode != 0) {
-            throw MakeError(value.stderr as String);
-          }
-        });
-        final metainfoPath =
-            path.join(Directory.current.path, makeConfig.metainfo!);
-        final metainfoFile = File(metainfoPath);
-        if (!metainfoFile.existsSync()) {
-          throw MakeError("Metainfo $metainfoPath path doesn't exist");
-        }
-        await metainfoFile.copy(
-          path.join(
-            metainfoDir,
-            makeConfig.appBinaryName + path.extension(makeConfig.metainfo!, 2),
-          ),
-        );
-      }
-
       final defaultSharedObjects = [
         'libapp.so',
         'libflutter_linux_gtk.so',
@@ -267,18 +240,14 @@ class AppPackageMakerAppImage extends AppPackageMaker {
         }),
       );
 
-      var outputMakeConfig = MakeConfig().copyWith(makeConfig)
-        ..packageFormat = 'AppImage';
-
       await $(
         'appimagetool',
         [
-          '--no-appstream',
           path.join(
             makeConfig.packagingDirectory.path,
             '${makeConfig.appName}.AppDir',
           ),
-          outputMakeConfig.outputFile.path,
+          makeConfig.outputFile.path.replaceAll('.appimage', '.AppImage'),
         ],
         environment: {
           'ARCH': 'x86_64',
@@ -290,7 +259,7 @@ class AppPackageMakerAppImage extends AppPackageMaker {
       });
 
       makeConfig.packagingDirectory.deleteSync(recursive: true);
-      return MakeResult(outputMakeConfig);
+      return MakeResult(makeConfig);
     } catch (e) {
       if (e is MakeError) rethrow;
       throw MakeError(e.toString());

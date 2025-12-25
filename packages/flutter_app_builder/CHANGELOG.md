@@ -1,16 +1,3 @@
-## 0.4.6
-
-* chore: Bump version to 0.4.6 to match main package
-
-## 0.4.5
-
-* bump `shell_executor` to 0.1.6
-
-## 0.4.4
-
-* feat: macOS builder support flavor arg. #133
-* fix: Fixed android builder not supporting flavor as upper case. (#197)
-
 ## 0.4.2
 
 * some fixes

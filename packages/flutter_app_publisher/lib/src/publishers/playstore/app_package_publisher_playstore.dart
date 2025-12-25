@@ -51,16 +51,6 @@ class AppPackagePublisherPlayStore extends AppPackagePublisher {
       uploadMedia: uploadMedia,
     );
 
-    if (publishConfig.track != null) {
-      //must update track before edit commit.
-      await publisherApi.edits.tracks.update(
-        Track(track: publishConfig.track),
-        publishConfig.packageName,
-        appEdit.id!,
-        publishConfig.track!,
-      );
-    }
-
     await publisherApi.edits.commit(
       publishConfig.packageName,
       appEdit.id!,

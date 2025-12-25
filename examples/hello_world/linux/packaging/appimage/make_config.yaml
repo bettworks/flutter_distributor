@@ -10,12 +10,6 @@ keywords:
 
 generic_name: Cool Application
 
-# supported mime types that can be opened using this application
-# supported_mime_type:
-#   - audio/mpeg
-
-metainfo: linux/packaging/helloworld.appdata.xml
-
 actions:
   - name: Say Hi
     label: say-hi
@@ -35,7 +29,7 @@ startup_notify: true
 
 # You can specify the shared libraries that you want to bundle with your app
 #
-# fastforge automatically detects the shared libraries that your app
+# flutter_distributor automatically detects the shared libraries that your app
 # depends on, but you can also specify them manually here.
 # 
 # The following example shows how to bundle the libcurl library with your app.

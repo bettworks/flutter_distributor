@@ -1,19 +1,3 @@
-## 0.4.6
-
-* fix(flutter_app_packager): fix build rpm on linux arm64 error (#204)
-* feat: `artifact_name` template now supports `has_build_number` variable (#232)
-* fix: AppImage mimetype is null (#248)
-* fix: can not set icon file when packaging windows exe (#246)
-
-## 0.4.5
-
-* bump `shell_executor` to 0.1.6
-* [FIX] Don't block rpm build if metainfo not found #202
-
-## 0.4.4
-
-* [Linux] Add MimeType for appimage and metainfo file support (#195)
-
 ## 0.4.2
 
 * some fixes
@@ -54,7 +38,7 @@
 ## 0.3.0
 
 * **FEAT**: apk & app maker support profile mode.
-* **FEAT**: Linux RPM packaging support  ([#101](https://github.com/fastforgedev/fastforge/issues/101)).
+* **FEAT**: Linux RPM packaging support  ([#101](https://github.com/leanflutter/flutter_distributor/issues/101)).
 
 ## 0.2.7
 
